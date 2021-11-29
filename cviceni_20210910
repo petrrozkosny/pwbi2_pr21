@@ -1,0 +1,49 @@
+Vytvorte tabulky
+- data
+- dim datumy (za pomoci funkce Calendarauto() )
+- dim lokality (unikatni hodnoty ze sloupcu Name, Location)
+- vyse uvedene tabulky propojte relacemi
+
+V tabulce Dim datumy doplnte sloupce
+	- rok
+	- mesic
+	- den
+	- den tydne (funkce WEEKDAY(), druhy argument bude mit hodnotu 2 , tj. tyden zacina pondelim
+	- typ dne (za pomoci funkce ADDCOLUMNS())
+		- pokud je den tydne <6 tak "vsedni den", jinak "vikend"
+
+Kontingencni tabulka (matrix / matice):
+- na radcich:
+	- dim datumy [rok]
+	- dim datumy [mesic]
+- na sloupcich
+	- dim lokality[name]
+
+- v hodnotach (dopocitejte kalkulovane miry)
+	- 1. suma srazek v danem roce, mesici a lokalite
+	- 2. suma srazek v danem roce, mesici a lokalite vs. suma srazek v predchozim roce, danem mesici a lokalite
+	- 3. suma srazek v danem roce, mesici a lokalite / suma srazek v danem roce a lokalite 
+	- 4. suma srazek v danem roce, mesici a lokalite / suma srazek v danem roce, prvním mesici roku, lokalite
+	- 5. maximum srazek v danem roce, mesici, lokalite - maximum srazek v danem roce (za vsechny mesici), lokalite
+	- 6. maximum srazek v danem roce, mesici, lokalite - maximum srazek v danem roce, mesici a vsech lokalitach
+	- 7. maximum srazek v danem roce, mesici, lokalite - maximum srazek v danem roce, vsech mesicich, vsech lokalitach
+	- 8. suma srazek kumulativne v danem roce a lokalite (tj. napr. u mesice 9 bude suma srazek v danem roce od 1 do 9 mesice)
+
+Prurez nad dim lokality[name]
+Spojnicovy graf s hodnotami
+- mesic
+- 9. maximalni srazky v uzivatelem vybrane lokalite a danem mesici
+- 10. maximalni srazky v uzivatelem vybrane lokalite a vsech mesicich 
+
+
+
+BONUS 1:
+(je na vás, jaký způsobem se k níže uvedenému dopracujete)
+Vizuál typu karta, ve kterém chceme vidět maximální roční srážky napříč lokalitami (tj. maximum ze sumy ročních srážek)
+
+Vizuál typu tabulka s hodnotami:
+- dim lokality[name]
+- suma srážek v posledním roce dané name - suma srážek za předcházející období v dané name 
+(tj. suma srážek za stejné období roku předcházejícího poslednímu roku, pointa je v tom, že pokud máme
+data např. do 1.10.2020, tak chceme porovnávat sumu za 1.1.2020 - 1.10.2020 a 1.1.2019 - 1.10.2019, pro kazdou lokalitu vsak
+muzeme mit jine posledni daum) 

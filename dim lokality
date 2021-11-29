@@ -1,0 +1,25 @@
+let
+
+
+data_lokality = Table.Buffer(data),
+
+
+tabulka = #table(
+{"Lokalita","Mesto","Zeme"},
+{
+{"GRAZ","Graz","Rakousko"},
+{"SALZBURG","Salzburg","Rakousko"},
+{"WIEN","Viden","Rakousko"},
+
+{"KOSICE","Kosice","Slovensko"},
+{"MOSNOV","Ostrava","Cesko"},
+{"PIDING","",""},
+{"PRAHA KLEMENTINUM","Praha","Cesko"},
+{"PRAHA LIBUS","Praha","Cesko"},
+{"RUZYNE","Praha","Cesko"},
+{"TURANY","Brno","Cesko"}}
+),
+    #"Přidané: Index" = Table.AddIndexColumn(tabulka, "Index", 0, 1, Int64.Type),
+    #"Změněný typ" = Table.TransformColumnTypes(#"Přidané: Index",{{"Lokalita", type text}, {"Mesto", type text}, {"Zeme", type text}})
+in
+    #"Změněný typ"

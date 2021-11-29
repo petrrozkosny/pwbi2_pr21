@@ -1,0 +1,17 @@
+#cf srazky = 
+
+VAR srazky = SUM(data[PRCP])
+
+VAR max_srazky = 
+MAXX(
+SUMMARIZE(    
+ALL('Dim Datumy'[Rok]),
+'Dim Datumy'[Rok],"srazky",
+CALCULATE(SUM(data[PRCP]),
+FILTER(data,
+data[Rok] = max('Dim Datumy'[Rok])))),[srazky])
+
+RETURN 
+IF(
+ ROUND(srazky,4) = ROUND(max_srazky,4),
+ "#ff4500","#ffffff")

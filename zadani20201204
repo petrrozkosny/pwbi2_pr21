@@ -1,0 +1,49 @@
+
+- Vytvořit parametr pro výběr jediné hodnoty (celé číslo) mezi 2000 - 2020 (inkrementace po 1)
+
+
+Stránka1
+Průřez nad sloupcem data[Name]]
+Sloupcový graf:
+Kumulativní srážky v jednotlivých data[Mesic] za data[Rok] odpovídající hodnotě v parametru a vybranou lokalitu v průřezu
+
+Stránka2
+
+Tabulka se sloupci:
+data[Name]
+data[Rok]
+Kalkulované míry:
+	- suma srážek v daném roce
+	- suma srážek v předchozím roce
+	- rozdíl ve srážkách v daném a předchozím roce
+	- srážky za maximální rok pro danou data[Name]
+	
+	
+--------------------------------------------------------
+TADY ZAČÍNÁ DALŠÍ CVIČENÍ
+--------------------------------------------------------
+Vytvořit agregovanou tabulku 'agregovana data' z tabulky 'data' se sloupci
+NAME,
+ROK,
+"Srazky" (suma data[PRCP])
+"Max. teplota" (max z data[TMAX])
+"Mesic s tropickou teplotou" - hodnota true/false, pokud max z[TMAX] pro dany mesic je >30
+
+Do tabulky 'data' přes relaci dopočítat
+- Číslo týdne hodnoty z 'Dim datumy' pro data['Date']
+
+Do tabulky 'dim lokality' dopocitat maximum z "Max. teplota" tabulky 'agregovana data'
+--------------------------------------------------------
+
+Stránka 3
+
+Sloupcový graf:
+- data[Mesic]
+- data[Prcp]
+
+Nad grafem tooltip / popis, v nem tabulka se sloupci: data[NAME], data[PRCP]
+
+Tabulka se sloupci: data[Name], data[PRCP]
+
+--------------------------------------------------------
+

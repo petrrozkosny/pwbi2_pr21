@@ -1,0 +1,277 @@
+Vytvořte agregovanou tabulku '1 agregovana data'
+ 
+====== CVIČENÍ 1 ============
+1. Sumarizujte tabulku 'data' do agregované tabulky '1 agregovana data'následujícím způsobem:
+1.1 Sumarizujeme dle sloupce 'data'[NAME]
+1.2 Vytváříme nové sloupce:
+1.2.1 "Max. teplota" = Maximální hodnota ze sloupce 'data'[TMAX]
+1.2.2 "Min. teplota" = Minimální hodnota ze sloupce 'data'[TMIN]
+1.2.3 "Srazky" = Suma hodnot ze sloupce 'data'[PRCP]
+1.2.4. "Pocet tropickych dnu" = Počet hodnot ve sloupci 'data'[DATE], pro které platí, že hodnota v 'data'[TMAX] >=30 (TOTO ZATÍM NEPOČÍTAT)
+
+2. Do sumarizované tabulky '1. agregovana data' přidejte funkčí ADDCOLUMNS() nový sloupec "Nejteplejsi lokalita", který:
+- bude obsahovat hodnotu true, pokud hodnota ve sloupci "Max. teplota" odpovídá nejvyšší hodnotě (je třeba se doptat na maximum z 'data'[TMAX])
+- bude obsahovat hodnotu false, pokud hodnota ve sloupci "Max. teplota" neodpovídá nejvyšší hodnotě (je třeba se doptat na maximum z 'data'[TMAX])
+
+3. Tabulku '1 agregovana data' propojte relacemi:
+3.1. Obousměrná aktivní relace s tabulkou 'Dim Lokality'
+3.2. Jednosměrná neaktivní relace s tabulkou 'data'
+
+4. Do tabulky '1 agregovana data' přidejte nové sloupce:
+4.1 "1. Zeme" = Hodnota ze sloupce 'Dim Lokality'[Zeme], a to za použití funkce RELATED()
+4.2. "2. Station" =  Hodnota ze sloupce 'data'[STATION], a to za pomocí funkcí: CALCULATE(), FIRSTNONBLANK(), USERELATIONSHIP()
+4.3. "3. Datum max. teploty" = Hodnota ze sloupce 'data'[DATE], kde hledáme ve sloupci 'data'[TMAX] hodnotu ze sloupce '1. agregovana data'[Max. teplota], a to za pomoci funkcí CALCULATE, FILTER(), ALL(), EARLIER()
+4.4. "4. Den tydne max. teploty" = Hodnota ze sloupce 'data'[Den tydne], a to za  pomocí funkce LOOKUPVALUE()
+
+5. Do tabulky 'data' přidejte nové sloupce:
+5.1 "5. Rok" = rok hodnoty ve sloupci 'data'[DATE] za použití funkce YEAR()
+5.2 "6. Mesic" = mesic hodnoty ve sloupci 'data'[DATE] za použití funkce MONTH()
+
+====== CVIČENÍ 1 ============
+
+====== CVIČENÍ 2 ============
+
+6. Vytvořte novou prázdnou tabulku '2 miry'
+
+7. Vytvořte novou tabulku / parametr '3 filtr roku', kdy:
+7.1. Nastavte minimální hodnotu na minimum z 'Dim Datumy'[Rok]
+7.2. Nastavte maximální hodnotu na maximum z 'Dim Datumy'[Rok]
+7.3. Iterujeme po 1
+7.4. Pokud si uživatel nevybere žádnou hodnotu, tak výychozí hodnotou je maximum z 'Dim Datumy'[Rok]
+
+
+8. Vytvořte stránku "srazky vyvoj"
+8.1. Vytvořte vizuál typu "průřez" a do něj dosaďte 'Dim Lokality'[Lokalita] - omezte možnosti na jediný výběr
+8.2. Vytvořte tabulku se sloupci:
+8.2.1. 'Dim Datumy'[Rok]
+8.2.2. 'data'[PRCP] - suma hodnot
+8.3. Dopočítejte kalkulované míry a ty dosaďte do sloupců této tabulky (8.2.)
+8.3.1. "01 srazky minuly rok" = Suma sloupce 'data'[PRCP] pro 'Dim Datumy'[Rok], který předcházel hodnotě na řádku vizuálu
+8.3.2. "02 srazky mezirocne" = Rozdíl mezi sumou 'data'[PRPC] a sumou 'data'[PRPC] z předcházejícího roku 
+8.3.3. (DOPLNIT ČÍSLO MÍRY )"srazky za srovnatelne obdobi" = Suma srážek za období, které je ekvivalentem období v aktuálním roce, 
+	tj. pokud máme poslední data k 28.11.2020, tak pro každý rok na řádku vizuálu hledáme sumu srážek od 1.1. daného roku do 28.11. daného roku.
+	Je tedy třeba spočítat: 
+8.3.3.1. Maximální datum
+8.3.3.2. Den a měsíc maximálního datumu
+8.3.3.3. Rok na řádku vizuálu
+8.3.3.4. Ekvivalent datumu pro daný rok, viz bod 8.3.3.
+8.3.3.5. Sumu srážek za období od 1.1. daného roku po datum spočítané v bodu 8.3.3.4.
+
+9. Vytvořte stránku "srazky kumulativne"
+9.1. Dosaďte parametr vytvořený v bodu 7
+9.2 Vytvořte sloupcový graf a dosaďte / dopočítejte:
+9.2.1. Sloupec 'Dim Datumy'[Mesic]
+9.2.2. Kalkulovanou míru "04 srazky kumulativne za vybrany rok", která počítá sumu kumulativních srážek k aktuálnímu měsíci,
+	tj. pokud je na ose hodnota 8 z 'Dim Datumy'[Mesic], počítáme kumulativní srážky k 8. měsíci včetně. Potřebujeme tedy:
+9.2.2.1. Číslo aktuálního měsíce
+9.2.2.2. Hodnotu z parametru, kterou použijeme jako filtr roku
+9.2.2.3. Sumu z data[PRCP] k danému měsíci (kumulativně) a za daný rok
+9.3. Vytvořte tabulku a dosaďte / dopočítejte:
+9.3.1. Sloupec 'Dim Lokality'[Mesto]
+9.3.2. Sloupec 'Dim Lokality'[Lokalita]
+9.3.3. Kalkulovanou míru "04 srazky kumulativne za vybrany rok"
+9.4. Spojnicový graf s použitím sloupců / měr:
+9.4.1. 'Dim Datumy'[Měsíc]
+9.4.2. 'Dim Lokality'[Lokalita]
+9.4.3. "04 srazky kumulativne za vybrany rok"
+
+10. Vytvořte stránku "srazky porovnani"
+10.1. Vytvořte vizuál typu "průřez" a do něj dosaďte 'Dim Lokality'[Lokalita] - omezte možnosti na jediný výběr
+
+10.2. Vytvořte kombinovaný graf a dosaďte / dopočítejte
+10.2.1. 'Dim Datumy'[Měsíc]
+10.2.2.	'data'[PRCP]
+10.2.3. Kalkulovanou míru "05 srazky prumer za lokalitu" = Průměr srážek za všechny měsíce všech let pro danou lokalitu
+
+10.3. Vytvořte kombinovaný graf a dosaďte / dopočítejte
+10.3.1. 'Dim Datumy'[Měsíc]
+10.3.2. 'data'[PRCP]
+10.3.3. Kalkulovanou míru "06 srazky prumer za mesic ve vsech lokalitach" = Průměr srážek za daný měsíc napříč všemi lokalitami (tj. ignorujeme filtr vizuálu 10.1.)
+
+10.4. Vytvořte kombinovaný graf a dosaďte / dopočítejte
+10.4.1. 'Dim Datumy'[Měsíc]
+10.4.2. 'data'[PRCP]
+10.4.3. Kalkulovanou míru "07 srazky prumer za zemi lokality dle mesice" = Průměr srážek za daný měsíc napříč všemi lokalitami v rámci země lokality,
+	kterou si uživatel zvolil v průřezu 10.1. Tj. pokud si uživatel zvolil "TURANY", počítáme průměr za zemi "Cesko"
+
+BONUS CVIČENÍ 2:
+
+11. Vytvořte stránku "srazky porovnani popis", nastavte ji typ "Popis", přebíráme všechny filtry, popis bude zobrazen nad grafem z bodu 9.2. následně dosaďte / dopočítejte
+11.1. Tabulku se sloupci
+11.2. 'Dim Lokality'[Lokalita]
+11.3. Kalkulovanou míru "08 tooltip srazky kumulativne za mesic ve vsech lokalitach", kdy potřebujeme spočítat:
+11.3.1. Maximální hodnotu z 'Dim Datumy'[Mesic], tento filtr přebíráme z grafu 9.2.
+11.3.2. Rok z parametru vytvořeného v bodu 9.1. 
+11.3.3. Sumu 'data'[PRCP] kumulativně k danému měsíci (včetně), pro daný rok	
+11.2. Kartu s textem:
+	Kalkulovaná míra "09 kontrola filtru lokality":
+	Pokud uživatel filtroval v tabulce 9.3. hodnotu, text: "Je filtrovan sloupec [Lokalita], jsou zobrazena filtrovana data",
+	Pokud uživatel nefiltroval v tabulce 9.3. hodnotu, text: "Porovnani kumulativnich srazek k vybranemu mesici a roku pro vsechny lokality"
+
+12. Počítejte kalkulované míry
+12.1. "10 titulek grafu srazky kumulativne", kterou použijeme nad grafy z bodů 9.2 a 9.4
+12.1.1. Pokud si uživatel zvolil v tabulce z bodu 9.3 jedinou hodnotu, vracíme text: "Vyvoj kumulativnich srazek v lokalite " a název lokality zjištění pomocí funkcí DISTINCT()
+12.1.2. Pokud si uživatel zvolil v tabulce z bodu 9.3 více hodnot, vracíme text: "Vyvoj kumulativnich srazek v lokalitach " a výpis lokalit za pomocí funkcí CONCATENATEX() a DISTINCT()
+12.1.3. Pokud neplatí 12.1.1. ani 12.1.2., vracíme text:  "Vyvoj kumulativnich srazek napric lokalitami"
+
+====== CVIČENÍ 3 ============
+
+
+13. Vytvořte stránku "teploty"
+13.1. Vytvořte tabulku se sloupci
+13.1.1. 'Dim Lokality'[Lokalita]
+13.1.2. 'data'[TMAX] (maximum)
+13.1.3. 'data'[TMIN] (minimum)
+13.2. Vytvořte spojnicový graf s osami
+13.2.1. 'Dim Datumy'[Měsíc]
+13.2.2. 'data'[TMAX] (maximum)
+13.2.3. 'data'[TMIN] (minimum)
+
+
+13.2.4 Kalkulovanou míru "11 titulek grafu teploty", kterou použijeme nad grafem z bodu 13.2.
+13.2.4.1 Pokud si uživatel zvolil v tabulce 13.1. jedinou hodnotu, vracíme text: "Vyvoj teplot lokalite " a název lokality zjištění pomocí funkcí DISTINCT()
+13.2.4.2 Pokud si uživatel zvolil v tabulce 13.1. více hodnot, vracíme text: "Vyvoj teplot v lokalitach " a výpis lokalit za pomocí funkcí CONCATENATEX() a DISTINCT()
+13.2.4.3 Pokud neplatí 12.1.1. ani 12.1.2., vracíme text:  "Vyvoj teplot napric lokalitami"
+
+13.3. Kartu s textem (texty z jednotlivých podbodů budou součásti jedné věty)
+13.3.1.
+	Pokud si uživatel filtroval v tabulce 13.1. jedinou hodnotu: Nejvyssi teplota v lokalite: " a název lokality zjištění pomocí funkcí DISTINCT()
+	Pokud si uživatel filtroval v tabulce 13.1. více hodnot: Nejvyssi teplota v lokalitách: " a výpis lokalit za pomocí funkcí CONCATENATEX() a DISTINCT()
+	Pokud si uživatel nefiltroval v tabulce 13.1. žádnou hodnotu: Nejvyssi teplota napric lokalitami"
+13.3.2. Minimalni teplota, tj. max z [TMAX] pro danou lokalitu/lokality
+13.3.3. Poslední (nejaktuálnější) datum hodnoty z bodu 13.3.2.
+
+Tj. výsledný text bude např Nejvyssi teplota v lokalite MOSNOV 35.9. °C namerena dne 17.7.2010
+
+13.4. Kartu s textem (texty z jednotlivých podbodů budou součásti jedné věty)
+13.4.1.
+	Pokud si uživatel filtroval v tabulce 13.1. jedinou hodnotu: "Nejnizsi teplota v lokalite: " a název lokality zjištění pomocí funkcí DISTINCT()
+	Pokud si uživatel filtroval v tabulce 13.1. více hodnot: "Nejnizsi teplota v lokalitách: " a výpis lokalit za pomocí funkcí CONCATENATEX() a DISTINCT()
+	Pokud si uživatel nefiltroval v tabulce 13.1. žádnou hodnotu: "Nejnizsi teplota napric lokalitami"
+13.4.2. Maximální teplota, tj. min z [TMIN] pro danou lokalitu/lokality
+13.4.3. Poslední (nejaktuálnější) datum hodnoty z bodu 13.4.2.
+
+Tj. výsledný text bude např Nejnizsi teplota v lokalite MOSNOV -22 °C namerena dne 12.1.2003
+
+13.5. Kombinovaný sloupcový a spojnicový graf
+13.5.1. 'Dim Datumy'[Měsíc] na zakladni ose
+13.5.2. Průměr z [TMAX] na sloupcové ose
+13.5.3. Kalkulovanou míru "15 maximalni teplota prumer za mesic ve vsech lokalitach" na spojnicové ose, kdy počítáme průměr z [TMAX] pro jednotlivé 'Dim Datumy'[Měsíc] napříč lokalitami, 
+	tj. rušíme filtr sloupce 'Dim Lokality'[Lokalita] použitý v tabulce z bodu 13.1.
+
+13.6. Kombinovaný sloupcový a spojnicový graf
+13.6.1. 'Dim Datumy'[Měsíc] na zakladni ose
+13.6.2. Průměr z [TMIN] na sloupcové ose
+13.6.3. Kalkulovanou míru "16 minimalni teplota prumer za mesic ve vsech lokalitach" na spojnicové ose, kdy počítáme průměr z [TMIN] pro jednotlivé 'Dim Datumy'[Měsíc] napříč lokalitami, 
+	tj. rušíme filtr sloupce 'Dim Lokality'[Lokalita] použitý v tabulce z bodu 13.1.
+
+
+BONUS CVIČENÍ 3
+
+14. Počítejte kalkulované míry:
+14.1. "17 cf max teplota v lokalite vs vsechny lokality" pro podmíněné formátování grafu z bodu 13.5. 
+	Pokud je průměrná [TMAX] pro danou 'Dim Lokality'[Lokalita] a 'Dim Datumy'[Měsíc] vyšší než průměrná [TMAX] pro všechny 'Dim Lokality'[Lokalita], 
+	bude barva podmíněného formátování "#000000", jinak "#fcbd09".
+14.2. "18 cf min teplota v lokalite vs vsechny lokality" pro podmíněné formátování grafu z bodu 13.6. 
+	Pokud je průměrná [TMIN] pro danou 'Dim Lokality'[Lokalita] a 'Dim Datumy'[Měsíc] vyšší než průměrná [TMIN] pro všechny 'Dim Lokality'[Lokalita], 
+	bude barva podmíněného formátování "#000000", jinak "#fcbd09".
+
+
+====== CVIČENÍ 3 ============
+
+15. Vytvořte stránku "prehled"
+15.1 Vytvořte vizuál typu "průřez" a do něj dosaďte 'Dim Lokality'[Lokalita] - omezte možnosti na jediný výběr
+15.2. Dosaďte parametr vytvořený v bodu 7
+15.3. Vytvořte tlačítko s akcí "Záložka" a textem "Vyvoj teplot"
+15.4. Vytvořte tlačítko s akcí "Záložka" a textem "Vyvoj srazek"
+
+15.5. Vytvořte spojnicový graf a dosaďte / dopočítejte
+15.5.1. 'Dim Datumy'[Měsíc]
+15.5.2. 'data'[PRCP] (suma)
+15.5.3. Kalkulovanou míru "19 srazky predchozi rok", kdy počítáme srážky za rok, který předchází roku vybraným uživatelem v parametru z bodu 15.2.
+
+15.6. Vytvořte sloupcový graf a dosaďte / dopočítejte
+15.6.1. 'Dim Datumy'[Měsíc]
+15.6.2. Kalkulovanou míru  "04 srazky kumulativne za vybrany rok" (již máme spočítáno)
+15.6.3. Kalkulovanou míru "20 srazky kumulativne za posledni cely rok", kdy počítáme kumulativní srážky za maximální rok, ke kterému máme data k 31.12., potřebujeme tedy zjistit:
+15.6.3.1. Maximální rok s daty k 31.12.
+15.6.3.2. Hodnotu z 'Dim Datumy'[Měsíc] na vizuálu
+15.6.3.3. Sumu 'data'[PRCP] kumulativně k 'Dim Datumy'[Měsíc] a poslední rok.
+
+15.7. Vytvořte sloupcový graf a dosaďte / dopočítejte
+15.7.1. 'Dim Datumy'[Rok]
+15.7.2. max z 'data'[TMAX]
+15.7.3. Kalkulovanou míru "21 max teplota predchozi rok", kdy počítáme max z 'data'[TMAX] pro 'Dim Datumy'[Rok], který předchází 'Dim Datumy'[Rok] na ose vizuálu
+
+
+15.8. Vytvořte spojnicový graf a dosaďte / dopočítejte
+15.8.1 'Dim Datumy'[Měsíc]
+15.8.2. Kalkulovanou míru "22 max teplota dle mesice za vybranou lokalitu a rok", kdy počítáme max z 'data'[TMAX] pro daný 'Dim Datumy'[Měsíc] a hodnotu z průřezu z bodu 15.1. a rok z parametru 15.2.
+15.8.3. Kalkulovanou míru "23 max teplota dle mesice za vybranou lokalitu a posledni rok", kdy počítáme max z 'data'[TMAX] pro daný 'Dim Datumy'[Měsíc] a hodnotu z průřezu z bodu 15.1. a maximální rok,
+	pro který máme data k 31.12.
+
+15.9. Vytvořte kartu a dopočítejte kalkulovanou míru "24 rok s nejvyssim potem destivych dnu", kdy je třeba:
+15.9.1. Agregovat tabulku 'data' dle jednotlivých data[5. rok] a spočítat počet 'data'[DATE] s hodnotou 'data'[PRCP]>0
+15.9.2. Najít maximum agregovaného sloupce s počtem dnů
+15.9.3. Najít poslední/ maximální data[5. rok], ve kterém spadlo maximum ročních srážek
+
+15.10. Vytvořte kartu a dopočítejte kalkulovanou míru "25 rok s nejvyssim potem tropickych dnu", kdy je třeba:
+15.10.1. Agregovat tabulku 'data' dle jednotlivých data[5. rok] a spočítat počet 'data'[DATE] s hodnotou 'data'[TMAX]>=30
+15.10.2. Najít maximum agregovaného sloupce s počtem dnů
+15.10.3. Najít poslední/ maximální data[5. rok], ve kterém bylo nejvíce tropických dnů
+
+15.11. Vytvořte 2 záložky
+15.11.1 Vyvoj teplot
+15.11.2 Vyvoj srazek
+
+V rámci záložky 15.11.1. nechte viditelné pouze vizuály 15.1;15.2;15.3;15.4;15.7;15.8;15.10
+V rámci záložky 15.11.2 nechte viditelné pouze vizuály 15.1;15.2;15.3;15.5;15.6;15.9
+
+====== KONEC CVIČENÍ 3 ============
+
+====== CVIČENÍ 4 ============
+
+16. Vytvořte stránku "dashboard"
+16.1. Kontingenční tabulka 
+16.1.1. 'Dim Datumy'[Rok] na řádcích
+16.1.2 'Dim Lokality'[Lokalita] ve sloupcích
+16.1.3 'data'[PRCP] (suma) v hodnotách
+
+17. Vytvořte stránku "dashboard-podrobnosti", která bude filtrovaná přes 'Dim Lokalita'[Lokalita], ponecháváme se také všechny filtry
+17.1. Vytvořte tabulku a dosaďte / dopočítejte
+17.1.1 'Dim Datumy'[Rok]
+17.1.2 Míru "26 pocet tropickych dnu" = počet dnů v dané 'Dim Lokality'[Lokalita] a 'Dim Datumy'[Rok], ve kterých byla hodnota z 'data'[TMAX] >=30
+17.1.3 Míru "27 pocet destivych dnu" = počet dnů v dané 'Dim Lokality'[Lokalita] a 'Dim Datumy'[Rok], ve kterých byla hodnota z 'data'[PRCP] >0
+17.1.4 Míru "28 mezirocni rozdil destivych dnu" = počet dnů v dané 'Dim Lokality'[Lokalita] a 'Dim Datumy'[Rok], ve kterých byla hodnota z 'data'[PRCP] >0 - počet dnů v dané 'Dim Lokality'[Lokalita]
+	a předchozí 'Dim Datumy'[Rok], ve kterých byla hodnota z 'data'[PRCP] > 0 
+17.2. Míru "29 nazev tabulky dashboard podrobnosti", která bude dosazena do tabulky 17.1 a bude obsahovat text "Vyvoj zakladnich ukazatelu v lokalite "+lokalita
+17.3. Vytvořte kartu a dosaďte hodnotu z míry "30 datum nejdestivejsiho dne", kdy hodnota bude datumem posledního/maximálního dne, ve kterém spadlo maximum z 'data'[PRCP]
+17.4. Vytvořte kartu a dosaďte hodnotu z míry "31 pocet destivych vikdendovych dnu v poslednim celem roce", kdy hodnota bude počtem 'data'[DATE], kdy datum připadá na víkend a 'data'[PRCP]>0,
+	to vše za rok, který je maximálním rokem, pro který máme data k 31.12. Pozn. filtrujeme 2 různé tabulky, data a 'Dim Datumy'
+
+18. Vytvořte stránku "dashboard2"
+18.1. Vytvořte vizuál typu "průřez" a do něj dosaďte 'Dim Lokality'[Lokalita]
+18.2. Vytvořte tlačítko s akcí "Záložka" a textem "Zobrazit v grafu"
+18.3. Vytvořte tlačítko s akcí "Záložka" a textem "Zobrazit v tabulce"
+18.4. Tabulka
+18.4.1. 'Dim Datumy'[Rok]
+18.4.2. 'data'[PRCP] (suma)
+18.5. Sloupcový graf
+18.5.1. 'Dim Datumy'[Rok]
+18.5.2. 'data'[PRCP] (suma)
+18.5.3. Míra "32 srazky prumer za lokalitu" = Průměr z 'data'[PRCP] pro danou 'Dim Lokality'[Lokalita], napříč všemi 'Dim Datumy'[Rok]. Bude třeba pracovat s agregovanou tabulkou,
+	která obsahuje sumu 'data'[PRCP] pro jednotlivé 'Dim Datumy'[Rok]
+18.5.4. Míru ""33 cf prumerne rocni srazky" pro podmíněné formátování grafu 18.5. = Pokud je suma 'data'[PRCP] v daném 'Dim Datumy'[Rok] vyšší než hodnota z 18.5.3., barva "#fcbd09", jinak "#e4dbcb"
+
+BONUS CVIČENÍ 4:
+
+19. Míry:
+19.1.1. "34 cf maximalni a minimalni srazky v letech dle lokalit pro podmíněné formátování tabulky  z bodu 16. 
+	Pokud je hodnota v buňce nejvyšší hodnotou napříč všemi 'Dim Datumy'[Rok] pro danou 'Dim Lokality'[Lokalita], barva "#fcbd09", 
+	pokud je hodnota v buňce nejnižší hodnotou napříč všemi 'Dim Datumy'[Rok] pro danou 'Dim Lokality'[Lokalita], barva "#e4dbcb",
+	pokud neplatí ani jedna výše uvedená podmínka, barva #FFFFFF"
+19.1.2. "35 cf srazky podrobnosti" pro podmíněné formátování tabulky z bodu 11.1., kdy:
+	Pokud je hodnota v buňce nejvyšší hodnotou pro daný 'Dim Datumy'[Rok] a 'Dim Datumy'[Měsíc], tak barva "#fcbd09",
+	pokud je hodnota v buňce nejnižší hodnotou  pro daný 'Dim Datumy'[Rok] a 'Dim Datumy'[Měsíc], tak barva "#e4dbcb",
+	pokud neplatí ani jedno výše uvedené, tak barva #FFFFFF".
+
